@@ -13,7 +13,7 @@ I implemented features like one-to-one chat, chat rooms, creation of chat room, 
 
 ## Screenshots
 
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
+![App Screenshot](/screenshot/screenshot1.png)
 
 
 ## Run Locally
