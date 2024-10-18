@@ -1,15 +1,9 @@
 import { Tooltip } from "@chakra-ui/react";
-import React from "react";
 import { MdLogout } from "react-icons/md";
-import { userStore } from "../store/global-store";
-import { useNavigate } from "react-router-dom";
+import useLogOut from "../hooks/useLogOut";
 
 const LogOutBtn = () => {
-  const navigate = useNavigate();
-  const handleLogOut = () => {
-    userStore.persist.clearStorage();
-    navigate("/");
-  };
+  const { handleLogOut } = useLogOut();
   return (
     <Tooltip label="log out" aria-label="log out button">
       <span className="text-lg" onClick={handleLogOut}>

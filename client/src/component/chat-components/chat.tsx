@@ -1,46 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { useSocket } from '../../context/socket-context';
+import React from "react";
+import useChat from "../../hooks/useChat";
 
-interface Message {
-  content: string;
-  sender: string;
-}
+const Message = ({ msg }: { msg: { sender: string; content: string } }) => {
+  return (
+    <p>
+      {msg.sender}: {msg.content}
+    </p>
+  );
+};
+
+const Messages = ({
+  messages,
+}: {
+  messages: { sender: string; content: string }[];
+}) => {
+  return (
+    <div>
+      {messages.map((msg, idx) => (
+        <Message msg={msg} key={idx} />
+      ))}
+    </div>
+  );
+};
 
 const ChatComponent: React.FC = () => {
-  const { socket } = useSocket();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState<string>("");
-
-  useEffect(() => {
-    if (socket) {
-      socket.on('message', (message: Message) => {
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
-    }
-
-    return () => {
-      socket?.off('message');
-    };
-  }, [socket]);
-
-  const sendMessage = () => {
-    if (newMessage.trim()) {
-      socket?.emit('sendMessage', newMessage);
-      setNewMessage('');
-    }
-  };
+  const { sendMessage, messages, newMessage, setNewMessage } = useChat();
 
   return (
     <div>
-      <div>
-        {messages.map((msg, idx) => (
-          <p key={idx}>{msg.sender}: {msg.content}</p>
-        ))}
-      </div>
-      <input 
-        type="text" 
-        value={newMessage} 
-        onChange={(e) => setNewMessage(e.target.value)} 
+      <Messages messages={messages} />
+
+      <input
+        type="text"
+        value={newMessage}
+        onChange={(e) => setNewMessage(e.target.value)}
         placeholder="Type a message..."
       />
       <button onClick={sendMessage}>Send</button>
@@ -49,3 +42,13 @@ const ChatComponent: React.FC = () => {
 };
 
 export default ChatComponent;
+
+{
+  /* <div>
+        {messages.map((msg, idx) => (
+          <p key={idx}>
+            {msg.sender}: {msg.content}
+          </p>
+        ))}
+      </div> */
+}

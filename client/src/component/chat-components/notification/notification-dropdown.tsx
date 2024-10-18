@@ -43,8 +43,6 @@ const NotificationDD: React.FC<Props> = ({ children }) => {
     </h1>;
   }
 
-  // console.log("notification", data?.data.data);
-
   if (data?.data.data === undefined) {
     <h1 className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center text-white bg-black/50 text-2xl font-semibold">
       Error Try again....

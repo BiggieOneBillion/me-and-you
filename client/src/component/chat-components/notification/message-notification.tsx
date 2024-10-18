@@ -13,11 +13,6 @@ const MessageNotification: React.FC<Props> = ({ messageNotifications }) => {
             Inbox
           </h3>
           <p className="text-sm font-medium px-2">You have new messages</p>
-          {/* <ul className="space-y-3">
-                    {messageNotifications.map((el: any, index: number) => (
-                      <li className="px-2 py-1 rounded-md">Hello baba</li>
-                    ))}
-             </ul> */}
         </div>
       )}
     </>
@@ -25,3 +20,11 @@ const MessageNotification: React.FC<Props> = ({ messageNotifications }) => {
 };
 
 export default MessageNotification;
+
+{
+  /* <ul className="space-y-3">
+        {messageNotifications.map((el: any, index: number) => (
+          <li className="px-2 py-1 rounded-md">Hello baba</li>
+        ))}
+  </ul> */
+}

@@ -15,11 +15,6 @@ const InviteNotification: React.FC<Props> = ({ inviteNotifications }) => {
           <p className="text-sm font-medium px-2">
             Avaliable chat requests pending
           </p>
-          {/* <ul className="space-y-3">
-            {inviteNotifications.map((el: any, index: number) => (
-              <li className="px-2 py-1 rounded-md">Hello baba</li>
-            ))}
-          </ul> */}
         </div>
       )}
     </>
@@ -27,3 +22,11 @@ const InviteNotification: React.FC<Props> = ({ inviteNotifications }) => {
 };
 
 export default InviteNotification;
+
+{
+  /* <ul className="space-y-3">
+        {inviteNotifications.map((el: any, index: number) => (
+          <li className="px-2 py-1 rounded-md">Hello baba</li>
+        ))}
+    </ul> */
+}

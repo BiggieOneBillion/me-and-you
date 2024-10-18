@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import LogoHeader from "../logo";
 import NavLinks from "./nav-links";
 import { createPortal } from "react-dom";
+import useSideNav from "../../../hooks/useSideNav";
 
 type Props = {
   isSidebarOpen: boolean;
 };
 
 const SideNav: React.FC<Props> = ({ isSidebarOpen }) => {
-  const [size, setSize] = useState<number>(0);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setSize(window.innerWidth);
-    };
-    document.addEventListener("resize", handleResize);
-    handleResize();
-
-    return () => document.removeEventListener("resize", handleResize);
-  }, []);
+  const { size } = useSideNav();
 
   if (size < 760) {
     return createPortal(

@@ -1,39 +1,7 @@
-import { useEffect, useState } from "react";
-import { useSocket } from "../../context/socket-context";
-import { userProp, userStore } from "../../store/global-store";
-import { jwtDecode } from "jwt-decode";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
-import { api } from "../../utils/api-settings";
-import { messageProp, messageStore } from "../../store/message-store";
 import GroupInfo from "./sidenav/groups/group-info";
 import GroupMessageDD from "./group-message-group-info";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-
-
-interface Message {
-  text: string;
-  user: string;
-}
-
-type decodeTokenType = {
-  userId: string;
-  iat: number;
-  exp: number;
-  name: string;
-};
-
-type fetchedDataType = {
-  _id: string;
-  sender: {
-    _id: string;
-    username: string;
-  };
-  recipient: string;
-  content: string;
-  emoji: string;
-  createdAt: string;
-};
+import useGroupMessageContainer from "../../hooks/useGroupMessageContainer";
 
 /*
 This component works this way, well first the route to this page is both messages/:id and messages/group/:id
@@ -42,60 +10,9 @@ Then it will listen to the socket for new messages and update the chat according
 */
 
 const GroupMessageContainer: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
 
-  const token = userStore((state: unknown) => (state as userProp).token);
-
-  const decodeToken: decodeTokenType = jwtDecode(token);
-
-  const { socket } = useSocket();
-
-  const params = useParams();
-
-  const recipient = messageStore(
-    (state: unknown) => (state as messageProp).recipient
-  );
-
-  const { data, isLoading, isError } = useQuery({
-    queryKey: [`group-message-conversation-${params.id}`],
-    queryFn: async () => {
-      const response = await api.get(`chats/messages/group/${params.id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return response;
-    },
-    // retry: false,
-    // refetchInterval: false,
-  });
-
-  useEffect(() => {
-    if (socket) {
-      socket.emit("joinRoom", {
-        roomId: params.id,
-        userId: decodeToken.userId,
-      });
-
-      socket.on("groupMessage", (message: Message) => {
-        // console.log(message);
-        setMessages((prevMessages) => [...prevMessages, message]);
-      });
-    }
-
-    return () => {
-      socket?.off("groupMessage");
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    if (data && data?.data) {
-      const pastMessage = data?.data.map((el: fetchedDataType) => {
-        return { user: el.sender.username, text: el.content };
-      });
-      setMessages(pastMessage);
-    }
-  }, [data]);
+  const { messages, recipient, isLoading, isError, decodeToken } =
+    useGroupMessageContainer();
 
   if (isLoading) {
     <h1 className=" z-50 fixed top-0 left-0 w-screen h-screen flex items-center justify-center text-white bg-black/50 text-2xl font-semibold">
@@ -109,7 +26,6 @@ const GroupMessageContainer: React.FC = () => {
     </h1>;
   }
 
-
   return (
     <section className="grid lg:grid-cols-3 h-full">
       <div className="h-full flex flex-col justify-between min-w-fully max-w-[500px] lg:col-span-2">
@@ -120,7 +36,8 @@ const GroupMessageContainer: React.FC = () => {
         {/* mobile view */}
         <GroupMessageDD>
           <h2 className="lg:hidden flex items-center gap-1 text w-fit px-3 py-1 bg-white rounded-md border lg:border-none lg:w-full lg:text-2xl font-semibold capitalize sticky top-0 left-0 lg:bg-[#D6C3BC]y lg:bg-transparent">
-            {recipient} <span className="md:hidden">group</span><IoMdInformationCircleOutline />
+            {recipient} <span className="md:hidden">group</span>
+            <IoMdInformationCircleOutline />
           </h2>
         </GroupMessageDD>
 

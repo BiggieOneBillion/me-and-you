@@ -1,4 +1,3 @@
-import React from "react";
 import { IoIosChatboxes } from "react-icons/io";
 
 const EmptyMsgContainer = () => {

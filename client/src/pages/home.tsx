@@ -1,5 +1,5 @@
 import Auth from "../component/auth/auth";
-import homeImg from "/chat2.jpeg"
+import homeImg from "/chatting.png"
 
 const Home = () => {
   return (

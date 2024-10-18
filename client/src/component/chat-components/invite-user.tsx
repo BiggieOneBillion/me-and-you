@@ -1,44 +1,10 @@
 import { FaHandshakeSimple } from "react-icons/fa6";
-import { useParams } from "react-router-dom";
-import { userProp, userStore } from "../../store/global-store";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "../../utils/api-settings";
-import { Button, useToast } from "@chakra-ui/react";
+import { Button } from "@chakra-ui/react";
+import useInviteUser from "../../hooks/useInviteUser";
 
 const InviteUser = () => {
-  const token = userStore((state: unknown) => (state as userProp).token);
-
-  const toast = useToast();
-
-  const param = useParams();
-
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async () => {
-      const response = await api.post(
-        `users/invite/${param.id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response;
-    },
-    onSuccess: () => {
-      toast({
-        status: "success",
-        position: "top-left",
-        title: "User invited successfully",
-      });
-      queryClient.invalidateQueries({ queryKey: ["users-invites"] });
-    },
-    onError(error) {
-      // console.log(error);
-    },
-  });
+  
+   const { mutation} = useInviteUser()
 
   return (
     <section className="h-full flex items-center justify-center">
